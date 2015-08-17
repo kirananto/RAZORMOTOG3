@@ -13,6 +13,7 @@
 *.o.*
 *.a
 *.s
+dt.img
 *.ko
 *.so
 *.so.dbg
