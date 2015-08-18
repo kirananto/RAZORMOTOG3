@@ -28,7 +28,7 @@
 /* Macros */
 #define MEMSHARE_DEV_NAME "memshare"
 #define MEMSHARE_CHILD_DEV_NAME "memshare_child"
-static DEFINE_DMA_ATTRS(attrs);
+DEFINE_DMA_ATTRS(attrs);
 
 #define MEM_SHARE_SERVICE_SVC_ID 0x00000034
 #define MEM_SHARE_SERVICE_INS_ID 1
@@ -214,7 +214,7 @@ static int modem_notifier_cb(struct notifier_block *this, unsigned long code,
 
 	switch (code) {
 
-	case SUBSYS_AFTER_SHUTDOWN:
+	case SUBSYS_AFTER_POWERUP:
 		pr_err("memshare: Modem Restart has happened\n");
 		free_mem_clients(DHMS_MEM_PROC_MPSS_V01);
 		break;

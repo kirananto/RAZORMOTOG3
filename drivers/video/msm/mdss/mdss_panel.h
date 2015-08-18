@@ -188,6 +188,8 @@ struct mdss_intf_recovery {
  * @MDSS_EVENT_ENABLE_TE: Change TE state, used for factory testing only
  * @MDSS_EVENT_REGISTER_RECOVERY_HANDLER: Event to recover the interface in
  *					case there was any errors detected.
+ * @MDSS_EVENT_INTF_RESTORE: Event to restore the interface in case there
+ *				was any errors detected during normal operation.
  * @MDSS_EVENT_SET_CABC: Set CABC mode, for Motorola "Dynamic CABC" feature.
  * @MDSS_EVENT_ENABLE_HBM: Enable Motorola High Brightness Mode feature.
  */
@@ -213,6 +215,7 @@ enum mdss_intf_events {
 	MDSS_EVENT_DSI_DYNAMIC_SWITCH,
 	MDSS_EVENT_REGISTER_RECOVERY_HANDLER,
 	MDSS_EVENT_ENABLE_TE,
+	MDSS_EVENT_INTF_RESTORE,
 	MDSS_EVENT_SET_CABC,
 	MDSS_EVENT_ENABLE_HBM,
 };
@@ -294,7 +297,7 @@ struct mipi_panel_info {
 	/* The packet-size should not bet changed */
 	char no_max_pkt_size;
 	/* Clock required during LP commands */
-	bool force_clk_lane_hs;
+	char force_clk_lane_hs;
 
 	char vsync_enable;
 	char hw_vsync_mode;
@@ -359,6 +362,8 @@ struct mdss_mdp_pp_tear_check {
 	u32 rd_ptr_irq;
 	u32 refx100;
 };
+
+struct mdss_livedisplay_ctx;
 
 struct mdss_panel_info {
 	u32 xres;
@@ -441,6 +446,8 @@ struct mdss_panel_info {
 	enum cabc_mode cabc_mode;
 	bool hbm_feature_enabled;
 	bool hbm_state;
+
+        struct mdss_livedisplay_ctx *livedisplay;
 };
 
 struct mdss_panel_data {

@@ -360,7 +360,7 @@ static int bcl_get_battery_voltage(int *vbatt)
 
 static void battery_monitor_work(struct work_struct *work)
 {
-	int vbatt = 0;
+	int vbatt;
 	struct bcl_context *bcl = container_of(work,
 			struct bcl_context, battery_monitor_work);
 

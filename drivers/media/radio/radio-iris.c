@@ -5225,9 +5225,9 @@ static const struct v4l2_ioctl_ops iris_ioctl_ops = {
 extern int radio_hci_smd_init(void);
 static int iris_fops_open(struct file *f) {
 	if (transport_ready < 0) {
-		transport_ready =  radio_hci_smd_init();
+		transport_ready = radio_hci_smd_init();
 	}
-        return transport_ready;
+	return transport_ready;
 }
 #endif
 

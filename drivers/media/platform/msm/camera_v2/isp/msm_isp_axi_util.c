@@ -205,8 +205,7 @@ static uint32_t msm_isp_axi_get_plane_size(
 	case V4L2_PIX_FMT_QRGGB8:
 	case V4L2_PIX_FMT_JPEG:
 	case V4L2_PIX_FMT_META:
-		size = plane_cfg[plane_idx].output_height *
-		plane_cfg[plane_idx].output_width;
+		size = plane_cfg[plane_idx].output_width;
 		break;
 	case V4L2_PIX_FMT_SBGGR10:
 	case V4L2_PIX_FMT_SGBRG10:
@@ -217,8 +216,7 @@ static uint32_t msm_isp_axi_get_plane_size(
 	case V4L2_PIX_FMT_QGRBG10:
 	case V4L2_PIX_FMT_QRGGB10:
 		/* TODO: fix me */
-		size = plane_cfg[plane_idx].output_height *
-		plane_cfg[plane_idx].output_width;
+		size = plane_cfg[plane_idx].output_width;
 		break;
 	case V4L2_PIX_FMT_SBGGR12:
 	case V4L2_PIX_FMT_SGBRG12:
@@ -237,38 +235,31 @@ static uint32_t msm_isp_axi_get_plane_size(
 	case V4L2_PIX_FMT_QGRBG14:
 	case V4L2_PIX_FMT_QRGGB14:
 		/* TODO: fix me */
-		size = plane_cfg[plane_idx].output_height *
-		plane_cfg[plane_idx].output_width;
+		size = plane_cfg[plane_idx].output_width;
 		break;
 	case V4L2_PIX_FMT_P16BGGR10:
 	case V4L2_PIX_FMT_P16GBRG10:
 	case V4L2_PIX_FMT_P16GRBG10:
 	case V4L2_PIX_FMT_P16RGGB10:
-		size = plane_cfg[plane_idx].output_height *
-		plane_cfg[plane_idx].output_width;
+		size = plane_cfg[plane_idx].output_width;
 		break;
 	case V4L2_PIX_FMT_NV12:
 	case V4L2_PIX_FMT_NV21:
 		if (plane_cfg[plane_idx].output_plane_format == Y_PLANE)
-			size = plane_cfg[plane_idx].output_height *
-				plane_cfg[plane_idx].output_width;
+			size = plane_cfg[plane_idx].output_width;
 		else
-			size = plane_cfg[plane_idx].output_height *
-				plane_cfg[plane_idx].output_width;
+			size = plane_cfg[plane_idx].output_width;
 		break;
 	case V4L2_PIX_FMT_NV14:
 	case V4L2_PIX_FMT_NV41:
 		if (plane_cfg[plane_idx].output_plane_format == Y_PLANE)
-			size = plane_cfg[plane_idx].output_height *
-				plane_cfg[plane_idx].output_width;
+			size = plane_cfg[plane_idx].output_width;
 		else
-			size = plane_cfg[plane_idx].output_height *
-				plane_cfg[plane_idx].output_width;
+			size = plane_cfg[plane_idx].output_width;
 		break;
 	case V4L2_PIX_FMT_NV16:
 	case V4L2_PIX_FMT_NV61:
-		size = plane_cfg[plane_idx].output_height *
-			plane_cfg[plane_idx].output_width;
+		size = plane_cfg[plane_idx].output_width;
 		break;
 	/*TD: Add more image format*/
 	default:
@@ -505,13 +496,8 @@ void msm_isp_sof_notify(struct vfe_device *vfe_dev,
 	struct msm_isp_event_data sof_event;
 	switch (frame_src) {
 	case VFE_PIX_0:
-		if (vfe_dev->isp_sof_debug < 5)
-			pr_err("%s: PIX0 frame id: %u\n", __func__,
-				vfe_dev->axi_data.src_info[VFE_PIX_0].frame_id);
-		else
-			ISP_DBG("%s: PIX0 frame id: %u\n", __func__,
-				vfe_dev->axi_data.src_info[VFE_PIX_0].frame_id);
-		vfe_dev->isp_sof_debug++;
+		ISP_DBG("%s: PIX0 frame id: %u\n", __func__,
+			vfe_dev->axi_data.src_info[VFE_PIX_0].frame_id);
 		vfe_dev->axi_data.src_info[VFE_PIX_0].frame_id++;
 		if (vfe_dev->axi_data.src_info[VFE_PIX_0].frame_id == 0)
 			vfe_dev->axi_data.src_info[VFE_PIX_0].frame_id = 1;
@@ -598,7 +584,6 @@ void msm_isp_calculate_bandwidth(
 	struct msm_vfe_axi_shared_data *axi_data,
 	struct msm_vfe_axi_stream *stream_info)
 {
-	int bpp = 0;
 	if (stream_info->stream_src < RDI_INTF_0) {
 		stream_info->bandwidth =
 			(axi_data->src_info[VFE_PIX_0].pixel_clock /
@@ -608,10 +593,11 @@ void msm_isp_calculate_bandwidth(
 			stream_info->format_factor / ISP_Q2;
 	} else {
 		int rdi = SRC_TO_INTF(stream_info->stream_src);
-		bpp = msm_isp_get_bit_per_pixel(stream_info->output_format);
 		if (rdi < VFE_SRC_MAX)
+			/*Need to consider the bits per pixel of sensor output
+			while calculating the bandwidth*/
 			stream_info->bandwidth =
-				(axi_data->src_info[rdi].pixel_clock / 8) * bpp;
+				(axi_data->src_info[rdi].pixel_clock * 10)/8;
 		else
 			pr_err("%s: Invalid rdi interface\n", __func__);
 	}
@@ -2012,31 +1998,4 @@ void msm_isp_process_axi_irq(struct vfe_device *vfe_dev,
 		}
 	}
 	return;
-}
-int msm_isp_user_buf_done(struct vfe_device *vfe_dev,
-	struct msm_isp_event_data *buf_cmd)
-{
-	int rc = 0;
-	struct msm_isp_event_data buf_event;
-	memset(&buf_event, 0, sizeof(buf_event));
-	buf_event.input_intf = buf_cmd->input_intf;
-	buf_event.frame_id = buf_cmd->frame_id;
-	buf_event.timestamp = buf_cmd->timestamp;
-	buf_event.u.buf_done.session_id =
-	  buf_cmd->u.buf_done.session_id;
-	buf_event.u.buf_done.stream_id =
-	  buf_cmd->u.buf_done.stream_id;
-	buf_event.u.buf_done.output_format =
-	  buf_cmd->u.buf_done.output_format;
-	buf_event.u.buf_done.buf_idx =
-	  buf_cmd->u.buf_done.buf_idx;
-	buf_event.u.buf_done.handle =
-	   buf_cmd->u.buf_done.handle;
-
-	vfe_dev->buf_mgr->ops->buf_done(vfe_dev->buf_mgr,
-			buf_event.u.buf_done.handle,
-			buf_event.u.buf_done.buf_idx,
-			&buf_event.timestamp, buf_event.frame_id,
-			buf_event.u.buf_done.output_format);
-	return rc;
 }

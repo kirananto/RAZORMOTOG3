@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2015 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -530,7 +530,7 @@ typedef enum
 
 #define CFG_AP_KEEP_ALIVE_PERIOD_NAME          "gApKeepAlivePeriod"
 #define CFG_AP_KEEP_ALIVE_PERIOD_MIN           ( 3 )
-#define CFG_AP_KEEP_ALIVE_PERIOD_MAX           ( 255 )
+#define CFG_AP_KEEP_ALIVE_PERIOD_MAX           ( 20 )
 #define CFG_AP_KEEP_ALIVE_PERIOD_DEFAULT       ( 5 )
 
 #define CFG_GO_KEEP_ALIVE_PERIOD_NAME          "gGoKeepAlivePeriod"
@@ -1411,16 +1411,9 @@ typedef enum
 #define CFG_ENABLE_BYPASS_11D_MAX                  ( 1 )
 #define CFG_ENABLE_BYPASS_11D_DEFAULT              ( 1 )
 
-/*
- * gEnableDFSChnlScan
- * 0: disable scan on DFS channels
- * 1: enables passive scan on DFS channels
- * 2: enables active scan on DFS channels for static list.
- *    Static or cfg list is the channel list set by ioctl SETROAMSCANCHANNELS.
-*/
 #define CFG_ENABLE_DFS_CHNL_SCAN_NAME              "gEnableDFSChnlScan"
 #define CFG_ENABLE_DFS_CHNL_SCAN_MIN               ( 0 )
-#define CFG_ENABLE_DFS_CHNL_SCAN_MAX               ( 2 )
+#define CFG_ENABLE_DFS_CHNL_SCAN_MAX               ( 1 )
 #define CFG_ENABLE_DFS_CHNL_SCAN_DEFAULT           ( 1 )
 
 #define CFG_ENABLE_DFS_PNO_CHNL_SCAN_NAME              "gEnableDFSPnoChnlScan"
@@ -2172,20 +2165,20 @@ This feature requires the dependent cfg.ini "gRoamPrefer5GHz" set to 1 */
  */
 #define CFG_ASD_PROBE_INTERVAL_NAME                     "gAsdProbeInterval"
 #define CFG_ASD_PROBE_INTERVAL_DEFAULT                  (50)
-#define CFG_ASD_PROBE_INTERVAL_MIN                      (1)
-#define CFG_ASD_PROBE_INTERVAL_MAX                      (500)
+#define CFG_ASD_PROBE_INTERVAL_MIN                      (10)
+#define CFG_ASD_PROBE_INTERVAL_MAX                      (100)
 
 /* RSSI Threshold used to trigger probing activity/selection process*/
 #define CFG_ASD_TRIGGER_THRESHOLD_NAME                  "gAsdTriggerThreshold"
-#define CFG_ASD_TRIGGER_THRESHOLD_DEFAULT               (-60)
-#define CFG_ASD_TRIGGER_THRESHOLD_MIN                   (-100)
-#define CFG_ASD_TRIGGER_THRESHOLD_MAX                   (-10)
+#define CFG_ASD_TRIGGER_THRESHOLD_DEFAULT               (-75)
+#define CFG_ASD_TRIGGER_THRESHOLD_MIN                   (-120)
+#define CFG_ASD_TRIGGER_THRESHOLD_MAX                   (0)
 
 /*RSSI Hysteresis Threshold for RSSI-RTT*/
 #define CFG_ASD_RTT_RSSI_HYST_THRESHOLD_NAME             "gAsdRTTRssiHystThreshold"
-#define CFG_ASD_RTT_RSSI_HYST_THRESHOLD_DEFAULT          (3)
+#define CFG_ASD_RTT_RSSI_HYST_THRESHOLD_DEFAULT          (50)
 #define CFG_ASD_RTT_RSSI_HYST_THRESHOLD_MIN              (0)
-#define CFG_ASD_RTT_RSSI_HYST_THRESHOLD_MAX              (5)
+#define CFG_ASD_RTT_RSSI_HYST_THRESHOLD_MAX              (100)
 
 //Enable debug for remain on channel issues
 #define CFG_DEBUG_P2P_REMAIN_ON_CHANNEL_NAME    "gDebugP2pRemainOnChannel"
@@ -2260,11 +2253,6 @@ This feature requires the dependent cfg.ini "gRoamPrefer5GHz" set to 1 */
 #define CFG_WLAN_LOGGING_NUM_BUF_MAX      ( 64 )
 #define CFG_WLAN_LOGGING_NUM_BUF_DEFAULT  ( 32 )
 #endif //WLAN_LOGGING_SOCK_SVC_ENABLE
-
-#define CFG_IGNORE_PEER_ERP_INFO_NAME      "gIgnorePeerErpInfo"
-#define CFG_IGNORE_PEER_ERP_INFO_MIN       ( 0 )
-#define CFG_IGNORE_PEER_ERP_INFO_MAX       ( 1 )
-#define CFG_IGNORE_PEER_ERP_INFO_DEFAULT   ( 0 )
 
 #define CFG_INITIAL_DWELL_TIME_NAME            "gInitialDwellTime"
 #define CFG_INITIAL_DWELL_TIME_DEFAULT         (0)
@@ -2428,34 +2416,6 @@ This feature requires the dependent cfg.ini "gRoamPrefer5GHz" set to 1 */
 #define CFG_BTC_ENABLE_IND_TIMER_VALUE_MIN     ( 5 )
 #define CFG_BTC_ENABLE_IND_TIMER_VALUE_MAX     ( 60 )
 #define CFG_BTC_ENABLE_IND_TIMER_VALUE_DEFAULT ( 60 )
-
-#define CFG_P2P_LISTEN_DEFER_INTERVAL_NAME     "gP2PListenDeferInterval"
-#define CFG_P2P_LISTEN_DEFER_INTERVAL_MIN      ( 100 )
-#define CFG_P2P_LISTEN_DEFER_INTERVAL_MAX      ( 200 )
-#define CFG_P2P_LISTEN_DEFER_INTERVAL_DEFAULT  ( 100 )
-
-#define CFG_TOGGLE_ARP_BDRATES_NAME       "gToggleArpBDRates"
-#define CFG_TOGGLE_ARP_BDRATES_MIN         0
-#define CFG_TOGGLE_ARP_BDRATES_MAX         1
-#define CFG_TOGGLE_ARP_BDRATES_DEFAULT     0
-
-
-
-/*
- * If within gLinkFailTimeout period(values is mentioned in msec) if FW
- * doesn't receive acks for gLinkFailTxCnt number of packets, then link will
- * be disconnected.
- */
-
-#define CFG_LINK_FAIL_TIMEOUT_NAME    "gLinkFailTimeout"
-#define CFG_LINK_FAIL_TIMEOUT_MIN     ( 1000 )
-#define CFG_LINK_FAIL_TIMEOUT_MAX     ( 60000 )
-#define CFG_LINK_FAIL_TIMEOUT_DEF     ( 6000 )
-
-#define CFG_LINK_FAIL_TX_CNT_NAME    "gLinkFailTxCnt"
-#define CFG_LINK_FAIL_TX_CNT_MIN     ( 50 )
-#define CFG_LINK_FAIL_TX_CNT_MAX     ( 1000 )
-#define CFG_LINK_FAIL_TX_CNT_DEF     ( 200 )
 
 /*--------------------------------------------------------------------------- 
   Type declarations
@@ -2894,7 +2854,7 @@ typedef struct
 #endif
    char                        overrideCountryCode[4];
    v_U32_t                     gAsdProbeInterval;
-   v_S7_t                      gAsdTriggerThreshold;
+   v_U32_t                     gAsdTriggerThreshold;
    v_U32_t                     gAsdRTTRssiHystThreshold;
    v_BOOL_t                    debugP2pRemainOnChannel;
    v_U32_t                     cfgBtcCTS2SduringSCO;
@@ -2916,7 +2876,7 @@ typedef struct
    v_U32_t                     wlanLoggingFEToConsole;
    v_U32_t                     wlanLoggingNumBuf;
 #endif
-   v_BOOL_t                    ignorePeerErpInfo;
+
    v_BOOL_t                    initialScanSkipDFSCh;
    v_U32_t                     cfgBtcFatalHidnSniffBlkGuidance;
    v_U32_t                     cfgBtcCriticalHidnSniffBlkGuidance;
@@ -2949,10 +2909,6 @@ typedef struct
    v_U32_t                     enableRtsCtsHtVht;
    v_U8_t                      btcEnableIndTimerVal;
    v_BOOL_t                    btcFastWlanConnPref;
-   v_U16_t                     gP2PListenDeferInterval;
-   v_BOOL_t                    toggleArpBDRates;
-   v_U32_t                     linkFailTimeout;
-   v_U32_t                     linkFailTxCnt;
 } hdd_config_t;
 /*--------------------------------------------------------------------------- 
   Function declarations and documenation

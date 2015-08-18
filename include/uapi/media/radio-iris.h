@@ -78,6 +78,7 @@
 #define MIN_SINR_SAMPLES 0x01
 #define MAX_SINR_SAMPLES 0xFF
 
+
 /* ---- HCI Packet structures ---- */
 #define RADIO_HCI_COMMAND_HDR_SIZE sizeof(struct radio_hci_command_hdr)
 #define RADIO_HCI_EVENT_HDR_SIZE   sizeof(struct radio_hci_event_hdr)

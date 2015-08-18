@@ -27,7 +27,6 @@
 #define ISP1_BIT              (0x10000 << 2)
 #define ISP_META_CHANNEL_BIT  (0x10000 << 3)
 #define ISP_SCRATCH_BUF_BIT   (0x10000 << 4)
-#define ISP_PDAF_CHANNEL_BIT   (0x10000 << 5)
 #define ISP_STATS_STREAM_BIT  0x80000000
 
 struct msm_vfe_cfg_cmd_list;
@@ -476,21 +475,8 @@ struct msm_isp_event_data {
 		struct msm_isp_buf_event buf_done;
 		struct msm_isp_error_info error_info;
 	} u; /* union can have max 52 bytes */
-	uint32_t is_skip_pproc;
 };
-#ifdef CONFIG_COMPAT
-struct msm_isp_event_data32 {
-	struct compat_timeval timestamp;
-	struct compat_timeval mono_timestamp;
-	enum msm_vfe_input_src input_intf;
-	uint32_t frame_id;
-	union {
-		struct msm_isp_stats_event stats;
-		struct msm_isp_buf_event buf_done;
-		struct msm_isp_error_info error_info;
-	} u;
-};
-#endif
+
 #define V4L2_PIX_FMT_QBGGR8  v4l2_fourcc('Q', 'B', 'G', '8')
 #define V4L2_PIX_FMT_QGBRG8  v4l2_fourcc('Q', 'G', 'B', '8')
 #define V4L2_PIX_FMT_QGRBG8  v4l2_fourcc('Q', 'G', 'R', '8')
@@ -581,11 +567,4 @@ struct msm_isp_event_data32 {
 #define VIDIOC_MSM_ISP_FETCH_ENG_START \
 	_IOWR('V', BASE_VIDIOC_PRIVATE+20, struct msm_vfe_fetch_eng_start)
 
-#ifdef CONFIG_COMPAT
-#define VIDIOC_MSM_ISP_BUF_DONE \
-	_IOWR('V', BASE_VIDIOC_PRIVATE+21, struct msm_isp_event_data32)
-#else
-#define VIDIOC_MSM_ISP_BUF_DONE \
-	_IOWR('V', BASE_VIDIOC_PRIVATE+21, struct msm_isp_event_data)
-#endif
 #endif /* __MSMB_ISP__ */

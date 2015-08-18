@@ -15,7 +15,7 @@
  # Please maintain this if you use this script or any part of it
  #
 KERNEL_DIR=$PWD
-KERN_IMG=$KERNEL_DIR/arch/arm64/boot/Image
+KERN_IMG=$KERNEL_DIR/arch/arm/boot/Image
 DTBTOOL=$KERNEL_DIR/tools/dtbToolCM
 BUILD_START=$(date +"%s")
 blue='\033[0;34m'
@@ -24,10 +24,10 @@ yellow='\033[0;33m'
 red='\033[0;31m'
 nocol='\033[0m'
 # Modify the following variable if you want to build
-export CROSS_COMPILE="/media/kiran/cfa944e1-2a51-4fa1-9334-894a93e41cb9/Android-Development/Kernel/Toolchains/aarch64-linux-android-4.9-LTS/bin/aarch64-linux-android-"
+export CROSS_COMPILE="/media/kiran/cfa944e1-2a51-4fa1-9334-894a93e41cb9/Android-Development/Kernel/Toolchains/android-ndk-r10e/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-"
 export USE_CCACHE=1
-export ARCH=arm64
-export SUBARCH=arm64
+export ARCH=arm
+export SUBARCH=arm
 export KBUILD_BUILD_USER="Kiran.Anto"
 export KBUILD_BUILD_HOST="RaZor-Machine"
 STRIP="/media/kiran/cfa944e1-2a51-4fa1-9334-894a93e41cb9/Android-Development/Kernel/Toolchains/aarch64-linux-android-4.9-LTS/bin/aarch64-linux-android-strip"
@@ -47,7 +47,7 @@ then
 echo -e "$red Kernel Compilation failed! Fix the errors! $nocol"
 exit 1
 fi
-$DTBTOOL -2 -o $KERNEL_DIR/arch/arm64/boot/dt.img -s 2048 -p $KERNEL_DIR/scripts/dtc/ $KERNEL_DIR/arch/arm/boot/dts/
+$DTBTOOL -2 -o $KERNEL_DIR/arch/arm/boot/dt.img -s 2048 -p $KERNEL_DIR/scripts/dtc/ $KERNEL_DIR/arch/arm/boot/dts/
 strip_modules
 }
 
@@ -65,15 +65,15 @@ cd $KERNEL_DIR
 
 case $1 in
 clean)
-make ARCH=arm64 -j8 clean mrproper
+make ARCH=arm -j8 clean mrproper
 rm -rf $KERNEL_DIR/arch/arm/boot/dt.img
 ;;
 *)
 compile_kernel
 ;;
 esac
-cp $KERNEL_DIR/arch/arm64/boot/Image  $MODULES_DIR/../G3Output/tools
-cp $KERNEL_DIR/arch/arm64/boot/dt.img  $MODULES_DIR/../G3Output/tools
+cp $KERNEL_DIR/arch/arm/boot/Image  $MODULES_DIR/../G3Output/tools
+cp $KERNEL_DIR/arch/arm/boot/dt.img  $MODULES_DIR/../G3Output/tools
 cp $MODULES_DIR/* $MODULES_DIR/../G3Output/system/lib/modules/
 cd $MODULES_DIR/../G3Output
 zipfile="RRV1.0OSPREY-$(date +"%Y-%m-%d(%I.%M%p)").zip"
