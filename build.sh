@@ -24,13 +24,14 @@ yellow='\033[0;33m'
 red='\033[0;31m'
 nocol='\033[0m'
 # Modify the following variable if you want to build
-export CROSS_COMPILE="/media/kiran/cfa944e1-2a51-4fa1-9334-894a93e41cb9/Android-Development/Kernel/Toolchains/android-ndk-r10e/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-"
+export CROSS_COMPILE="/media/kiran/cfa944e1-2a51-4fa1-9334-894a93e41cb9/Android-Development/Kernel/Toolchains/arm-eabi-6.0/bin/arm-eabi-"
 export USE_CCACHE=1
 export ARCH=arm
 export SUBARCH=arm
+export VARIANT=osprey
 export KBUILD_BUILD_USER="Kiran.Anto"
 export KBUILD_BUILD_HOST="RaZor-Machine"
-STRIP="/media/kiran/cfa944e1-2a51-4fa1-9334-894a93e41cb9/Android-Development/Kernel/Toolchains/aarch64-linux-android-4.9-LTS/bin/aarch64-linux-android-strip"
+STRIP="/media/kiran/cfa944e1-2a51-4fa1-9334-894a93e41cb9/Android-Development/Kernel/Toolchains/arm-eabi-6.0/bin/arm-eabi-strip"
 MODULES_DIR=$KERNEL_DIR/../RaZORBUILDOUTPUT/Common
 
 compile_kernel ()
@@ -41,7 +42,7 @@ echo "                                        Compiling RaZorReborn for MOTO G3 
 echo "                    "
 echo -e "**********************************************************************************************"
 make razor_osprey_defconfig
-make -j12
+make -j10 
 if ! [ -a $KERN_IMG ];
 then
 echo -e "$red Kernel Compilation failed! Fix the errors! $nocol"
@@ -74,7 +75,7 @@ compile_kernel
 esac
 cp $KERNEL_DIR/arch/arm/boot/zImage  $MODULES_DIR/../G3Output/tools
 cp $KERNEL_DIR/arch/arm/boot/dt.img  $MODULES_DIR/../G3Output/tools
-cp $MODULES_DIR/* $MODULES_DIR/../G3Output/system/lib/modules/
+cp $MODULES_DIR/wlan.ko $MODULES_DIR/../G3Output/system/lib/modules/pronto/pronto_wlan.ko
 cd $MODULES_DIR/../G3Output
 zipfile="RRV1.0OSPREY-$(date +"%Y-%m-%d(%I.%M%p)").zip"
 zip -r $zipfile system tools META-INF -x *kernel/.gitignore*
