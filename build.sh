@@ -72,7 +72,7 @@ rm -rf $KERNEL_DIR/arch/arm/boot/dt.img
 compile_kernel
 ;;
 esac
-cp $KERNEL_DIR/arch/arm/boot/Image  $MODULES_DIR/../G3Output/tools
+cp $KERNEL_DIR/arch/arm/boot/zImage  $MODULES_DIR/../G3Output/tools
 cp $KERNEL_DIR/arch/arm/boot/dt.img  $MODULES_DIR/../G3Output/tools
 cp $MODULES_DIR/* $MODULES_DIR/../G3Output/system/lib/modules/
 cd $MODULES_DIR/../G3Output
