@@ -75,7 +75,7 @@ compile_kernel
 esac
 cp $KERNEL_DIR/arch/arm/boot/zImage  $MODULES_DIR/../G3Output/tools
 cp $KERNEL_DIR/arch/arm/boot/dt.img  $MODULES_DIR/../G3Output/tools
-cp $MODULES_DIR/wlan.ko $MODULES_DIR/../G3Output/system/lib/modules/pronto/pronto_wlan.ko
+cp $MODULES_DIR/* $MODULES_DIR/../G3Output/system/lib/modules
 cd $MODULES_DIR/../G3Output
 zipfile="RRV1.0OSPREY-$(date +"%Y-%m-%d(%I.%M%p)").zip"
 zip -r $zipfile system tools META-INF -x *kernel/.gitignore*
