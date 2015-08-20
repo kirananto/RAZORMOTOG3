@@ -15,7 +15,7 @@
  # Please maintain this if you use this script or any part of it
  #
 KERNEL_DIR=$PWD
-KERN_IMG=$KERNEL_DIR/arch/arm/boot/Image
+KERN_IMG=$KERNEL_DIR/arch/arm/boot/zImage
 DTBTOOL=$KERNEL_DIR/tools/dtbToolCM
 BUILD_START=$(date +"%s")
 blue='\033[0;34m'
@@ -36,6 +36,11 @@ MODULES_DIR=$KERNEL_DIR/../RaZORBUILDOUTPUT/Common
 
 compile_kernel ()
 {
+rm -rf $KERNEL_DIR/arch/arm/boot/dt.img
+rm -rf $KERNEL_DIR/arch/arm/boot/Image
+rm -rf $KERNEL_DIR/arch/arm/boot/zImage
+rm -rf $MODULES_DIR/../G3Output/tools/dt.img
+rm -rf $MODULES_DIR/../G3Output/tools/zImage
 echo -e "**********************************************************************************************"
 echo "                    "
 echo "                                        Compiling RaZorReborn for MOTO G3                    "
@@ -53,6 +58,7 @@ strip_modules
 }
 
 
+
 strip_modules ()
 {
 echo "Copying modules"
@@ -63,6 +69,8 @@ echo "Stripping modules for size"
 $STRIP --strip-unneeded *.ko
 cd $KERNEL_DIR
 }
+
+
 
 case $1 in
 clean)
@@ -75,7 +83,7 @@ compile_kernel
 esac
 cp $KERNEL_DIR/arch/arm/boot/zImage  $MODULES_DIR/../G3Output/tools
 cp $KERNEL_DIR/arch/arm/boot/dt.img  $MODULES_DIR/../G3Output/tools
-cp $MODULES_DIR/* $MODULES_DIR/../G3Output/system/lib/modules
+cp $MODULES_DIR/wlan.ko $MODULES_DIR/../G3Output/system/lib/modules/pronto/pronto_wlan.ko
 cd $MODULES_DIR/../G3Output
 zipfile="RRV1.0OSPREY-$(date +"%Y-%m-%d(%I.%M%p)").zip"
 zip -r $zipfile system tools META-INF -x *kernel/.gitignore*
