@@ -1587,6 +1587,19 @@ static inline void mmc_blk_reset_success(struct mmc_blk_data *md,
 	}
 }
 
+int mmc_access_rpmb(struct mmc_queue *mq)
+{
+	struct mmc_blk_data *md = mq->data;
+	/*
+	 * If this is a RPMB partition access, return ture
+	 */
+	if (md && md->part_type == EXT_CSD_PART_CONFIG_ACC_RPMB)
+		return true;
+
+	return false;
+}
+
+
 static int mmc_blk_throttle_back(struct mmc_blk_data *md, struct mmc_host *host)
 {
 	int err;
